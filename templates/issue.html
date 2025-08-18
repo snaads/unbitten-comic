@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+  <style>
+    body { margin:0; font-family:sans-serif; }
+    .swiper { width:100vw; height:calc(100vh - 100px); } /* main slider */
+    .thumbs { height:100px; box-sizing:border-box; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../">← Back</a>
+  </header>
+
+  <div class="swiper main">
+    <div class="swiper-wrapper">
+      {% for file in pages %}
+      <div class="swiper-slide">
+        <img src="{{ file }}" alt="">
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="swiper thumbs">
+    <div class="swiper-wrapper">
+      {% for file in pages %}
+      <div class="swiper-slide">
+        <img src="thumbs/{{ file }}" alt="">
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script>
+    const thumbs = new Swiper('.thumbs', {
+      slidesPerView: 'auto',
+      freeMode: true,
+      spaceBetween: 10,
+    });
+    const main = new Swiper('.main', {
+      navigation: { nextEl: '.next', prevEl: '.prev' },
+      thumbs: { swiper: thumbs },
+    });
+  </script>
+</body>
+</html>
