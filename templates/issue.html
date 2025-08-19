@@ -16,9 +16,12 @@
 
   <div class="swiper main">
     <div class="swiper-wrapper">
-      {% for file in pages %}
+      {% for page in pages %}
       <div class="swiper-slide">
-        <img src="{{ file }}" alt="">
+        <picture>
+          <source type="image/webp" srcset="{{ page.webp }}">
+          <img src="{{ page.file }}" alt="">
+        </picture>
       </div>
       {% endfor %}
     </div>
@@ -26,9 +29,9 @@
 
   <div class="swiper thumbs">
     <div class="swiper-wrapper">
-      {% for file in pages %}
+      {% for page in pages %}
       <div class="swiper-slide">
-        <img src="thumbs/{{ file }}" alt="">
+        <img src="thumbs/{{ page.file }}" alt="">
       </div>
       {% endfor %}
     </div>

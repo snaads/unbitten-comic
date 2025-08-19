@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node build.js",
+    "serve": "python3 -m http.server -d public 8080",
+    "deploy": "./deploy.sh",
+    "format": "prettier -w build.js \"templates/**/*.html\"",
+    "test": "echo \"No tests yet\" && exit 0"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +19,8 @@
     "nunjucks": "^3.2.4",
     "sharp": "^0.34.3",
     "swiper": "^11.2.10"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
   }
 }
