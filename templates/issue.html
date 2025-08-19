@@ -1,52 +1,120 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or issue }}</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="preconnect" href="https://unpkg.com">
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-  <style>
-    body { margin:0; font-family:sans-serif; }
-    .swiper { width:100vw; height:calc(100vh - 100px); } /* main slider */
-    .thumbs { height:100px; box-sizing:border-box; }
-  </style>
 </head>
-<body>
-  <header>
-    <a href="../">← Back</a>
+<body class="viewer-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="../">
+        <img src="../logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+      </a>
+      <nav class="nav">
+        <a href="../index.html">Index</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
   </header>
 
-  <div class="swiper main">
-    <div class="swiper-wrapper">
-      {% for page in pages %}
-      <div class="swiper-slide">
-        <picture>
-          <source type="image/webp" srcset="{{ page.webp }}">
-          <img src="{{ page.file }}" alt="">
-        </picture>
-      </div>
-      {% endfor %}
-    </div>
+  <!-- Centered logo that follows header visibility -->
+  <div class="center-logo" aria-hidden="true">
+    <img src="../logo.png" alt="" onerror="this.parentElement.style.display='none'">
   </div>
 
-  <div class="swiper thumbs">
-    <div class="swiper-wrapper">
-      {% for page in pages %}
-      <div class="swiper-slide">
-        <img src="thumbs/{{ page.file }}" alt="">
+  <!-- Floating header toggle (visible even when header is hidden) -->
+  <button class="header-fab" id="headerFab" aria-label="Toggle header" aria-expanded="false">
+    <span class="chevron"></span>
+  </button>
+
+  <main class="viewer">
+    <h1 class="visually-hidden">{{ arc }} {% if cycle %}— {{ cycle }}{% endif %}</h1>
+    <div class="swiper main" id="mainSwiper">
+      <div class="swiper-wrapper">
+        {% for page in pages %}
+        <div class="swiper-slide">
+          <picture>
+            <source type="image/webp" srcset="{{ page.webp }}">
+            <img src="{{ page.file }}" alt="Page {{ loop.index }} of {{ title }}">
+          </picture>
+        </div>
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
-  </div>
+
+    <div class="thumbs-bar">
+      <button class="thumbs-toggle" id="thumbsToggle" aria-label="Toggle pages" aria-expanded="false">
+        <span class="chevron chevron-up"></span>
+        Pages
+      </button>
+    </div>
+
+    <div class="swiper thumbs" id="thumbsSwiper" aria-label="Pages navigation">
+      <div class="swiper-wrapper">
+        {% for page in pages %}
+        <div class="swiper-slide">
+          <img src="thumbs/{{ page.file }}" alt="Thumb {{ loop.index }}">
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+
+  <!-- Overlay navigation arrows (must exist before Swiper init) -->
+  <button class="nav-arrow prev" aria-label="Previous page"></button>
+  <button class="nav-arrow next" aria-label="Next page"></button>
 
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
   <script>
-    const thumbs = new Swiper('.thumbs', {
+    // Header collapse toggle via floating button
+    const headerFab = document.getElementById('headerFab');
+    function setHeader(collapsed) {
+      document.body.classList.toggle('nav-collapsed', !!collapsed);
+      headerFab?.setAttribute('aria-expanded', String(!collapsed));
+    }
+    headerFab?.addEventListener('click', () => {
+      setHeader(!document.body.classList.contains('nav-collapsed'));
+    });
+
+    // Swiper setup
+    const thumbs = new Swiper('#thumbsSwiper', {
       slidesPerView: 'auto',
       freeMode: true,
       spaceBetween: 10,
+      watchSlidesProgress: true,
     });
-    const main = new Swiper('.main', {
-      navigation: { nextEl: '.next', prevEl: '.prev' },
+    const main = new Swiper('#mainSwiper', {
       thumbs: { swiper: thumbs },
+      spaceBetween: 0,
+      navigation: { nextEl: '.nav-arrow.next', prevEl: '.nav-arrow.prev' },
+    });
+  </script>
+
+  <script>
+
+    // Thumbnails toggle
+    const thumbsToggle = document.getElementById('thumbsToggle');
+    function setThumbs(hidden) {
+      document.body.classList.toggle('thumbs-hidden', !!hidden);
+      thumbsToggle.setAttribute('aria-expanded', String(!hidden));
+    }
+    thumbsToggle?.addEventListener('click', () => {
+      setThumbs(!document.body.classList.contains('thumbs-hidden'));
+      setTimeout(() => { main.update(); thumbs.update(); }, 200);
+    });
+
+    // Default states on issue page
+    setHeader(true); // hide header by default on issue pages
+    setThumbs(true); // hide pages navigation by default
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); main.slidePrev(); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); main.slideNext(); }
     });
   </script>
 </body>

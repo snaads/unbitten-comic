@@ -18,6 +18,8 @@ async function build() {
     .filter((d) => fs.lstatSync(path.join(issuesDir, d)).isDirectory())
     .sort();
 
+  const issuesData = [];
+
   for (const issue of issues) {
     const src = path.join(issuesDir, issue);
     const out = path.join(publicDir, issue);
@@ -51,11 +53,11 @@ async function build() {
           .toFile(outThumb)
       );
 
-      // Generate optimized WebP (up to 1600px width)
+      // Generate optimized WebP (up to 2560px width for sharper display on large/retina screens)
       tasks.push(
         sharp(sourceFile)
-          .resize({ width: 1600, withoutEnlargement: true })
-          .webp({ quality: 80 })
+          .resize({ width: 2560, withoutEnlargement: true })
+          .webp({ quality: 85 })
           .toFile(outWebp)
       );
 
@@ -65,17 +67,50 @@ async function build() {
     // Await all image processing for this issue
     await Promise.all(tasks);
 
-    const html = nunjucks.render("issue.html", { issue, pages });
+    // Determine title from optional title.txt; expect two lines: arc + cycle
+    let arc = issue;
+    let cycle = "";
+    let title = issue;
+    const titleTxt = path.join(src, "title.txt");
+    if (fs.existsSync(titleTxt)) {
+      const raw = fs.readFileSync(titleTxt, "utf8");
+      const lines = raw
+        .split(/\r?\n/) 
+        .map((l) => l.trim())
+        .filter(Boolean);
+      arc = lines[0] || issue;
+      cycle = lines[1] || "";
+      title = cycle ? `${arc} — ${cycle}` : arc;
+    }
+
+    // First page as cover for index
+    const cover = pageFiles.length ? `${issue}/thumbs/${pageFiles[0]}` : null;
+
+    // Accumulate issue metadata for index page
+    issuesData.push({ id: issue, title, cover, arc, cycle });
+
+    const html = nunjucks.render("issue.html", { issue, pages, title, arc, cycle });
     fs.writeFileSync(path.join(out, "index.html"), html);
   }
 
-  const indexHtml = nunjucks.render("index.html", { issues });
+  const indexHtml = nunjucks.render("index.html", { issues: issuesData });
   fs.writeFileSync(path.join(publicDir, "index.html"), indexHtml);
 
   fs.copyFileSync(
     path.join(__dirname, "templates", "about.html"),
     path.join(publicDir, "about.html")
   );
+
+  // Copy site stylesheet
+  try {
+    fs.copyFileSync(
+      path.join(__dirname, "templates", "styles.css"),
+      path.join(publicDir, "styles.css")
+    );
+  } catch (e) {
+    // Styles are optional; log but don't fail build
+    console.warn("Stylesheet missing or failed to copy:", e.message);
+  }
 }
 
 build().catch((err) => {

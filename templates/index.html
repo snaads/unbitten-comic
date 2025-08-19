@@ -1,17 +1,43 @@
 <!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"></head>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+  <title>Issues</title>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+</head>
 <body>
-  <header>
-    <a href="index.html">Index</a> |
-    <a href="about.html">About</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href=".">
+        <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+      </a>
+      <nav class="nav">
+        <a href="index.html" class="active">Index</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
   </header>
 
-  <h1>Issues</h1>
-  <ul>
-    {% for issue in issues %}
-      <li><a href="{{ issue }}/">{{ issue }}</a></li>
-    {% endfor %}
-  </ul>
+  <main class="container">
+    <h1 class="visually-hidden">Issues</h1>
+    <div class="issues-grid">
+      {% for issue in issues %}
+        <a class="issue-card" href="{{ issue.id }}/">
+          {% if issue.cover %}
+            <img class="issue-cover" src="{{ issue.cover }}" alt="Cover of {{ issue.arc }} {{ issue.cycle }}">
+          {% endif %}
+          <div class="issue-title">
+            <span class="issue-arc">{{ issue.arc }}</span>
+            {% if issue.cycle %}<span class="issue-cycle">{{ issue.cycle }}</span>{% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </main>
+
+  <script></script>
 </body>
 </html>

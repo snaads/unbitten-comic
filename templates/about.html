@@ -1,11 +1,42 @@
 <!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"></head>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+  <title>About</title>
+</head>
 <body>
-  <header>
-    <a href="index.html">Index</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="index.html">
+        <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+      </a>
+      <nav class="nav">
+        <a href="index.html">Index</a>
+        <a href="about.html" class="active">About</a>
+      </nav>
+    </div>
   </header>
-  <h1>About</h1>
-  <p>Describe your comic here.</p>
+
+  <main class="container about">
+    <h1>About</h1>
+    <p class="about-intro">This is a short introduction to your comic. You can edit this text directly in <code>templates/about.html</code>.</p>
+
+    <dl class="qa">
+      <dt>What is Unbitten?</dt>
+      <dd>A visual story released in issues. Each issue is a cycle within an arc.</dd>
+
+      <dt>How often are new cycles released?</dt>
+      <dd>Whenever they’re ready. Follow along on the index page for updates.</dd>
+
+      <dt>Who makes this?</dt>
+      <dd>You do. Replace this content with your own Q&A below.</dd>
+    </dl>
+
+    <p>To change this content, edit this file: <code>templates/about.html</code>, then run <code>node build.js</code>.</p>
+  </main>
+
+  <script></script>
 </body>
 </html>
