@@ -27,7 +27,9 @@
       {% for issue in issues %}
         <a class="issue-card" href="{{ issue.id }}/">
           {% if issue.cover %}
-            <img class="issue-cover" src="{{ issue.cover }}" alt="Cover of {{ issue.arc }} {{ issue.cycle }}">
+            <div class="issue-cover-wrap"{% if index_aspect %} style="aspect-ratio: {{ index_aspect }}"{% endif %}>
+              <img class="issue-cover" src="{{ issue.cover }}" alt="Cover of {{ issue.arc }} {{ issue.cycle }}">
+            </div>
           {% endif %}
           <div class="issue-title">
             <span class="issue-arc">{{ issue.arc }}</span>

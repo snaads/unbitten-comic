@@ -33,16 +33,18 @@
 
   <main class="viewer">
     <h1 class="visually-hidden">{{ arc }} {% if cycle %}— {{ cycle }}{% endif %}</h1>
-    <div class="swiper main" id="mainSwiper">
-      <div class="swiper-wrapper">
-        {% for page in pages %}
-        <div class="swiper-slide">
-          <picture>
-            <source type="image/webp" srcset="{{ page.webp }}">
-            <img src="{{ page.file }}" alt="Page {{ loop.index }} of {{ title }}">
-          </picture>
+    <div class="viewer-viewport">
+      <div class="swiper main" id="mainSwiper">
+        <div class="swiper-wrapper">
+          {% for page in pages %}
+          <div class="swiper-slide">
+            <picture>
+              <source type="image/webp" srcset="{{ page.webp }}">
+              <img src="{{ page.file }}" alt="Page {{ loop.index }} of {{ title }}">
+            </picture>
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
       </div>
     </div>
 
@@ -56,8 +58,35 @@
     <div class="swiper thumbs" id="thumbsSwiper" aria-label="Pages navigation">
       <div class="swiper-wrapper">
         {% for page in pages %}
+        {% set i = loop.index0 %}
+        {% set n = pages | length %}
+        {% if i == 0 %}
+          {% set label = 'cover' %}
+        {% elif i == n - 1 %}
+          {% set label = 'end page' %}
+        {% elif i == 1 %}
+          {% set label = '00' %}
+        {% else %}
+          {% set pair_index = ((i - 2) // 2) %}
+          {% set first_num = pair_index * 2 + 1 %}
+          {% set second_num = first_num + 1 %}
+          {% if first_num < 10 %}
+            {% set first_str = '0' ~ first_num %}
+          {% else %}
+            {% set first_str = '' ~ first_num %}
+          {% endif %}
+          {% if second_num < 10 %}
+            {% set second_str = '0' ~ second_num %}
+          {% else %}
+            {% set second_str = '' ~ second_num %}
+          {% endif %}
+          {% set label = first_str ~ '-' ~ second_str %}
+        {% endif %}
         <div class="swiper-slide">
-          <img src="thumbs/{{ page.file }}" alt="Thumb {{ loop.index }}">
+          <div class="thumb-item">
+            <img src="thumbs/{{ page.file }}" alt="Thumb {{ loop.index }}">
+            <div class="thumb-label">{{ label }}</div>
+          </div>
         </div>
         {% endfor %}
       </div>
@@ -86,9 +115,13 @@
       freeMode: true,
       spaceBetween: 10,
       watchSlidesProgress: true,
+      grabCursor: true,
+      mousewheel: { forceToAxis: true, releaseOnEdges: true },
     });
     const main = new Swiper('#mainSwiper', {
       thumbs: { swiper: thumbs },
+      slidesPerView: 1,
+      centeredSlides: false,
       spaceBetween: 0,
       navigation: { nextEl: '.nav-arrow.next', prevEl: '.nav-arrow.prev' },
     });

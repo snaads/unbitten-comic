@@ -11,6 +11,8 @@ const issuesDir = path.join(__dirname, "issues");
 const publicDir = path.join(__dirname, "public");
 
 async function build() {
+  // Clean and recreate public output to avoid stale files
+  fs.rmSync(publicDir, { recursive: true, force: true });
   fs.mkdirSync(publicDir, { recursive: true });
 
   const issues = fs
@@ -19,6 +21,9 @@ async function build() {
     .sort();
 
   const issuesData = [];
+
+  // Determine a single global aspect ratio for index covers (from first available 00.png)
+  let globalCoverAspect = null;
 
   for (const issue of issues) {
     const src = path.join(issuesDir, issue);
@@ -83,8 +88,18 @@ async function build() {
       title = cycle ? `${arc} — ${cycle}` : arc;
     }
 
-    // First page as cover for index
+    // First page as cover for index and (for first found) aspect ratio from source image
     const cover = pageFiles.length ? `${issue}/thumbs/${pageFiles[0]}` : null;
+    if (pageFiles.length && !globalCoverAspect) {
+      try {
+        const md = await sharp(path.join(src, pageFiles[0])).metadata();
+        if (md.width && md.height) {
+          globalCoverAspect = `${md.width} / ${md.height}`;
+        }
+      } catch (e) {
+        console.warn(`Failed to read cover metadata for ${issue}:`, e.message);
+      }
+    }
 
     // Accumulate issue metadata for index page
     issuesData.push({ id: issue, title, cover, arc, cycle });
@@ -93,7 +108,7 @@ async function build() {
     fs.writeFileSync(path.join(out, "index.html"), html);
   }
 
-  const indexHtml = nunjucks.render("index.html", { issues: issuesData });
+  const indexHtml = nunjucks.render("index.html", { issues: issuesData, index_aspect: globalCoverAspect });
   fs.writeFileSync(path.join(publicDir, "index.html"), indexHtml);
 
   fs.copyFileSync(
