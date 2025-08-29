@@ -11,7 +11,8 @@
   --viewer-pad-y: 16px; /* equal top/bottom breathing room */
   --drawer-gap: 10px; /* equal margins around thumbs drawer */
   --viewport-gap: 60px; /* distance from window edges */
-  --viewport-bg: var(--bg-darker); /* darker viewport background for issue slider */
+  /* Use a much darker backdrop for the issue viewer */
+  --viewport-bg: rgb(31, 31, 31); /* issue slider background */
 }
 
 * { box-sizing: border-box; }
@@ -47,8 +48,9 @@ body {
 .nav { display: flex; gap: 12px; }
 .nav a { text-decoration: none; color: var(--fg); opacity: 0.8; }
 .nav a.active, .nav a:hover { opacity: 1; }
-/* Generic chevron */
-.chevron { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid var(--fg); transition: transform .2s ease; }
+/* Generic chevron icon (SVG) */
+.chevron { display: inline-block; width: 16px; height: 16px; transition: transform .2s ease; }
+.chevron svg { width: 100%; height: 100%; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 /* Pages drawer toggle: up when drawer is visible, down when hidden */
 .chevron-up { transform: rotate(0deg); }
 body.thumbs-hidden .chevron-up { transform: rotate(180deg); }
@@ -111,11 +113,11 @@ body.thumbs-hidden .thumbs { transform: translateY(100%); opacity: 0; pointer-ev
 body:not(.thumbs-hidden) .thumbs-bar { bottom: calc(var(--thumbs-h) + var(--drawer-gap)) !important; }
 
 /* Overlay arrows for main slider */
-.nav-arrow { position: fixed; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; border: none; background: transparent; cursor: pointer; z-index: 15; display: grid; place-items: center; padding: 0; }
+.nav-arrow { position: fixed; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border: none; background: transparent; cursor: pointer; z-index: 15; display: grid; place-items: center; padding: 0; color: #fff; opacity: 0.9; }
 .nav-arrow.prev { left: var(--gap); }
 .nav-arrow.next { right: var(--gap); }
-.nav-arrow::before { content: ''; display: block; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 10px solid var(--fg); }
-.nav-arrow.prev::before { transform: rotate(180deg); }
+.nav-arrow svg { width: 100%; height: 100%; stroke: currentColor; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.nav-arrow.prev svg { transform: rotate(180deg); }
 .nav-arrow.swiper-button-disabled { opacity: 0; pointer-events: none; }
 
 /* About page */

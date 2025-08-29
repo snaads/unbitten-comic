@@ -28,7 +28,9 @@
 
   <!-- Floating header toggle (visible even when header is hidden) -->
   <button class="header-fab" id="headerFab" aria-label="Toggle header" aria-expanded="false">
-    <span class="chevron"></span>
+    <span class="chevron" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </span>
   </button>
 
   <main class="viewer">
@@ -50,7 +52,9 @@
 
     <div class="thumbs-bar">
       <button class="thumbs-toggle" id="thumbsToggle" aria-label="Toggle pages" aria-expanded="false">
-        <span class="chevron chevron-up"></span>
+        <span class="chevron chevron-up" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
+        </span>
         Pages
       </button>
     </div>
@@ -94,8 +98,12 @@
   </main>
 
   <!-- Overlay navigation arrows (must exist before Swiper init) -->
-  <button class="nav-arrow prev" aria-label="Previous page"></button>
-  <button class="nav-arrow next" aria-label="Next page"></button>
+  <button class="nav-arrow prev" aria-label="Previous page">
+    <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+  </button>
+  <button class="nav-arrow next" aria-label="Next page">
+    <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+  </button>
 
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
   <script>
@@ -141,8 +149,8 @@
     });
 
     // Default states on issue page
-    setHeader(true); // hide header by default on issue pages
-    setThumbs(true); // hide pages navigation by default
+    setHeader(false); // keep header visible by default
+    setThumbs(true);  // hide pages navigation by default
 
     // Keyboard navigation
     window.addEventListener('keydown', (e) => {
