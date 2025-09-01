@@ -9,13 +9,15 @@
 <body>
   <header class="site-header">
     <div class="header-inner">
-      <a class="logo" href="index.html">
-        <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
-      </a>
-      <nav class="nav">
+      <nav class="nav nav-left">
         <a href="index.html">Index</a>
         <a href="about.html" class="active">About</a>
       </nav>
+      <a class="nav-logo" href="index.html" aria-label="Home">
+        <img src="logo.png" alt="" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid'">
+        <span class="logo-placeholder" aria-hidden="true">LOGO</span>
+      </a>
+      <nav class="nav nav-right"></nav>
     </div>
   </header>
 
