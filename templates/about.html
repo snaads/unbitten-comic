@@ -17,28 +17,51 @@
         <img src="logo.png" alt="" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid'">
         <span class="logo-placeholder" aria-hidden="true">LOGO</span>
       </a>
-      <nav class="nav nav-right"></nav>
+      <nav class="nav nav-right">
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M4.5 19.5 L19.5 4.5" stroke="currentColor" stroke-width="2"/>
+            <path d="M4.5 19.5 L12 12 L19.5 4.5 A9 9 0 0 1 4.5 19.5 Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </nav>
     </div>
   </header>
 
   <main class="container about">
-    <h1>About</h1>
-    <p class="about-intro">This is a short introduction to your comic. You can edit this text directly in <code>templates/about.html</code>.</p>
+    
+    {% if about and about.intro %}
+      <p class="about-intro">{{ about.intro }}</p>
+    {% else %}
+      <p class="about-intro">This is a short introduction to your comic. You can edit this text directly in <code>templates/about.html</code> or provide <code>content/about.json</code>.</p>
+    {% endif %}
 
-    <dl class="qa">
-      <dt>What is Unbitten?</dt>
-      <dd>A visual story released in issues. Each issue is a cycle within an arc.</dd>
+    {% if about and about.qa %}
+      <dl class="qa">
+        {% for item in about.qa %}
+          <dt>{{ item.q }}</dt>
+          <dd>{{ item.a }}</dd>
+        {% endfor %}
+      </dl>
+    {% else %}
+      <dl class="qa">
+        <dt>What is Unbitten?</dt>
+        <dd>A visual story released in issues. Each issue is a cycle within an arc.</dd>
+        <dt>How often are new cycles released?</dt>
+        <dd>Whenever they’re ready. Follow along on the index page for updates.</dd>
+        <dt>Who makes this?</dt>
+        <dd>You do. Replace this content with your own Q&A below.</dd>
+      </dl>
+    {% endif %}
 
-      <dt>How often are new cycles released?</dt>
-      <dd>Whenever they’re ready. Follow along on the index page for updates.</dd>
-
-      <dt>Who makes this?</dt>
-      <dd>You do. Replace this content with your own Q&A below.</dd>
-    </dl>
-
-    <p>To change this content, edit this file: <code>templates/about.html</code>, then run <code>node build.js</code>.</p>
+    {% if about and about.footerNote %}
+      <p>{{ about.footerNote }}</p>
+    {% else %}
+      <p>To change this content, edit this file: <code>templates/about.html</code> or <code>content/about.json</code>, then run <code>node build.js</code>.</p>
+    {% endif %}
   </main>
 
-  <script></script>
+  <script src="theme.js"></script>
 </body>
 </html>

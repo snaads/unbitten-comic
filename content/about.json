@@ -1,0 +1,19 @@
+{
+	"title": "PROJECT UNBITTEN",
+	"intro": "Project Unbitten lives somewhere between scripture and simulation. A fractured story told in cycles, where beginnings don't behave and endings refuse to settle. Familiar, but not quite. Beautiful, but wrong in exactly the right way.",
+	"qa": [
+	  { "q": "Is this comic AI-generated?", "a": "Yes and no. The images are made with AI, but the ideas, writing, prompts, curation, layout, and photoshopping are all human. Think of it like directing an unpredictable illustrator who doesn’t sleep." },
+	  { "q": "So you’re stealing other people’s art?", "a": "Technically, yes — like every artist ever. AI is trained on a massive soup of images, but I don’t use real-life references or named artists in my prompts. This style came about with words like ‘heavy-metal magazine’ and ‘digital fresco,’ not by typing in someone’s name and pressing enter." },
+	  { "q": "Couldn’t you just draw it yourself?", "a": "Definitely not. Not even close." },
+	  { "q": "Doesn’t AI kill creativity?", "a": "Nah. Bad prompts kill creativity. Lazy copying kills creativity. For me, it actually enhances creativity—I can test, iterate, and push weirder ideas further than I ever could alone." },
+	  { "q": "Why use AI at all then?", "a": "Because otherwise this project wouldn’t exist. This is the first time I could let a story spill out in this way—fast enough, weird enough, and visual enough to keep up with the ideas." },
+	  { "q": "Aren’t you worried people will hate this?", "a": "Yes." },
+	  { "q": "So you just asked AI ‘write me a comic’?", "a": "Sure, but it would be shit and definitely not mine. Every page is stitched together from dozens of images, prompts, edits, crops, and Photoshop work." },
+	  { "q": "So how is it actually made?", "a": "It starts with defining prompting styles and curating a moodboard of references, vibes, and visual anchors. Then the workflow goes like this: overall story layout → break down per issue → break down per page and spread → layout of text and visuals → write text → prompt artwork → revise, revise, revise (until it finally clicks)." },
+	  { "q": "How do you get a consistent style and visuals?", "a": "Not so easy. Characters are a bit generic on purpose—no locked reference sheets, because that actually makes prompting harder and more limited. Some images (‘ostriches running’) come out almost perfect right away in the right style, while other, more pivotal panels take endless prompting and tweaking to get just right." },
+	  { "q": "Why are there dinosaurs?", "a": "Because the simulation forgot to update the patch notes." },
+	  { "q": "Do you secretly worship ostriches?", "a": "Maybe. They run like chaos incarnate, and I respect that." },
+	  { "q": "Are you religious?", "a": "No. But I am fascinated by how stories shape belief, and how belief shapes worlds. This project plays in that in-between space—where myth, history, and glitch overlap." }
+	],
+	"footerNote": "by Sander Sturing\nWritten · Prompted · Layouted\n2025"
+  }

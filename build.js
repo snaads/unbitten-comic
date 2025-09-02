@@ -111,10 +111,20 @@ async function build() {
   const indexHtml = nunjucks.render("index.html", { issues: issuesData, index_aspect: globalCoverAspect });
   fs.writeFileSync(path.join(publicDir, "index.html"), indexHtml);
 
-  fs.copyFileSync(
-    path.join(__dirname, "templates", "about.html"),
-    path.join(publicDir, "about.html")
-  );
+  // Render About page from optional JSON content
+  let aboutData = null;
+  try {
+    const aboutJsonPath = path.join(__dirname, "content", "about.json");
+    if (fs.existsSync(aboutJsonPath)) {
+      const raw = fs.readFileSync(aboutJsonPath, "utf8");
+      aboutData = JSON.parse(raw);
+    }
+  } catch (e) {
+    console.warn("Failed to load about.json:", e.message);
+  }
+
+  const aboutHtml = nunjucks.render("about.html", { about: aboutData });
+  fs.writeFileSync(path.join(publicDir, "about.html"), aboutHtml);
 
   // Copy site stylesheet
   try {
@@ -122,9 +132,38 @@ async function build() {
       path.join(__dirname, "templates", "styles.css"),
       path.join(publicDir, "styles.css")
     );
+    // Copy theme script
+    fs.copyFileSync(
+      path.join(__dirname, "templates", "theme.js"),
+      path.join(publicDir, "theme.js")
+    );
   } catch (e) {
     // Styles are optional; log but don't fail build
     console.warn("Stylesheet missing or failed to copy:", e.message);
+  }
+
+  // Copy static assets (e.g., logo, fonts) from ./assets to public root
+  try {
+    const assetsDir = path.join(__dirname, "assets");
+    if (fs.existsSync(assetsDir)) {
+      const copyRecursive = (src, dest) => {
+        const stat = fs.statSync(src);
+        if (stat.isDirectory()) {
+          fs.mkdirSync(dest, { recursive: true });
+          for (const entry of fs.readdirSync(src)) {
+            copyRecursive(path.join(src, entry), path.join(dest, entry));
+          }
+        } else {
+          fs.copyFileSync(src, dest);
+        }
+      };
+      // Copy into public root (assets/foo -> public/foo)
+      for (const entry of fs.readdirSync(assetsDir)) {
+        copyRecursive(path.join(assetsDir, entry), path.join(publicDir, entry));
+      }
+    }
+  } catch (e) {
+    console.warn("Failed to copy assets:", e.message);
   }
 }
 
